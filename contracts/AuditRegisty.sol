@@ -11,5 +11,4 @@ contract AuditRegistry {
         address cmo;           // cmo
         uint256 timestamp;     // timestamp
     }
-
-}
+    }
