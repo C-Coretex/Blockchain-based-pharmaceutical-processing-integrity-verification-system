@@ -45,3 +45,18 @@ docker-compose down
 
 
 
+The goal of the project is to create a system that guarantees the integrity, authenticity, and immutability of data related to the production, packaging, serialization, and quality control of medicinal products. The system should simplify and reduce the cost of audits, eliminate mistrust between MAHs and CMOs, and prevent the falsification of production records.
+
+What we are going to do:
+We are developing a blockchain-based verification system in which: 
+    CMOs and MAHs send hash values of production data to a private blockchain. 
+    All sensitive data is stored only in the companies' internal databases; only the hash and timestamp are stored on the blockchain. 
+    The auditor receives the actual data from the MAH/CMO, hashes it again, and compares it with the blockchain record.
+    If the hash matches, the data is confirmed, has not been altered, and is authentic.
+
+System structure:
+    UI for MAH, CMO, and auditors.
+    API for sending data, generating hashes, and verifying authenticity.
+    Private Blockchain Network, where immutable records (hash + timestamp) are stored.
+    External Databases, where companies continue to store their real data.
+    
