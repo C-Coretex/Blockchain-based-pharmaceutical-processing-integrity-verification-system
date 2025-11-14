@@ -1,0 +1,6 @@
+.env
+db_data/
+cache/
+artifacts/
+node_modules/
+.env.local

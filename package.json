@@ -1,0 +1,19 @@
+{
+    "name": "audit-chain",
+    "version": "1.0.0",
+    "description": "Blockchain-based audit registry for MAH/CMO/Auditor workflow",
+    "scripts": {
+      "start": "node backend/server.js",
+      "node": "npx hardhat node",
+      "deploy": "npx hardhat run scripts/deploy.js --network localhost"
+    },
+    "dependencies": {
+      "pg": "^8.11.1",
+      "dotenv": "^16.4.1",
+      "@nomicfoundation/hardhat-toolbox": "^3.0.0"
+    },
+    "devDependencies": {
+      "hardhat": "^2.22.1"
+    }
+  }
+  
