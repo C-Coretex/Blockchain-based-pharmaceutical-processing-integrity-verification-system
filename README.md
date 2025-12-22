@@ -7,7 +7,8 @@ It involves three main participants:
 - **CMO** (Contract Manufacturing Organization) — records hashed audit data  
 - **Auditor** — verifies audit hashes against blockchain records  
 
-https://docs.google.com/document/d/1PvVCXS0DJaQiNjFjo2QQV4XgmCvkCYxAY9jpZpa1Mqw/edit?usp=sharing
+1. https://docs.google.com/document/d/1PvVCXS0DJaQiNjFjo2QQV4XgmCvkCYxAY9jpZpa1Mqw/edit?usp=sharing
+2. https://docs.google.com/document/d/1gtSQT29TO4_VxADrETaOF9dp0kyychnKQZrO4zZ8M7Q/edit?usp=sharing
 
 ```
 The goal of the project is to create a system that guarantees the integrity, authenticity, and immutability of data related to the production, packaging, serialization, and quality control of medicinal products. The system should simplify and reduce the cost of audits, eliminate mistrust between MAHs and CMOs, and prevent the falsification of production records.
