@@ -2,26 +2,23 @@ version: '3.9'
 
 services:
   #Backend
-  api:
-    image: ${DOCKER_REGISTRY-}api
-    container_name: api
+  pharma.api:
+    image: ${DOCKER_REGISTRY-}pharma.api
+    container_name: pharma.api
     build:
-      context: ./backend/api
-      dockerfile: ./PharmaBlockchainBackend.Api/Dockerfile
+      context: .
+      dockerfile: ./backend/api/PharmaBlockchainBackend.Api/Dockerfile
     ports:
       - "8080:8080"
       - "8081:8081"
     depends_on:
-      infrastructure:
+      pharma.infrastructure:
         condition: service_healthy
-    environment:
-      AppSettings__uiUrl: http://localhost:5173
-      ASPNETCORE_ENVIRONMENT: Development
 
   #Databases
-  infrastructure:
+  pharma.infrastructure:
     image: postgres:latest
-    container_name: timehacker.infrastructure
+    container_name: pharma.infrastructure
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
