@@ -8,7 +8,7 @@ var dbConnectionString = builder.Configuration.GetConnectionString("DbConnection
 
 builder.Services.RegisterRepositories(dbConnectionString);
 
-builder.Services.AddControllers();
+builder.Services.AddScoped<PharmaBlockchainBackend.Api.Features.ProtocolActions.StepSubmit.Handler>(); //StepSubmit.Handler
 
 var uiUrl = builder.Configuration.GetValue<string>("AppSettings:uiUrl")!;
 builder.Services.AddCors(options =>
@@ -23,6 +23,7 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -42,8 +43,6 @@ else
 }
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
-app.MapControllers();
+PharmaBlockchainBackend.Api.Features.ProtocolActions.StepSubmit.Endpoint.Map(app);
 
 app.Run();

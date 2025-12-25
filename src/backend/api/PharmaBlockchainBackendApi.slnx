@@ -3,7 +3,7 @@
     <Build />
   </Project>
   <Project Path="PharmaBlockchainBackend.Api/PharmaBlockchainBackend.Api.csproj" />
+  <Project Path="PharmaBlockchainBackend.Domain/PharmaBlockchainBackend.Domain.csproj" Id="8731b644-9315-4566-b5bf-fed1b45385ce" />
   <Project Path="PharmaBlockchainBackend.Infrastructure/PharmaBlockchainBackend.Infrastructure.csproj" Id="9ca38037-2c41-40dc-97a7-aa086350f772" />
   <Project Path="PharmaBlockchainBackend.Providers.Blockchain/PharmaBlockchainBackend.Providers.Blockchain.csproj" Id="4a685bfc-9df6-4aa9-8911-69705e1c07c1" />
-  <Project Path="PharmaBlockchainBackend.Services/PharmaBlockchainBackend.Services.csproj" Id="1b07b998-bd2b-473b-86f4-4910d978ab55" />
 </Solution>
