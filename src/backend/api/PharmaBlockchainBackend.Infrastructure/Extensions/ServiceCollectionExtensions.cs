@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using PharmaBlockchainBackend.Infrastructure.Entities;
 
 namespace PharmaBlockchainBackend.Infrastructure.Extensions
 {
@@ -10,7 +11,10 @@ namespace PharmaBlockchainBackend.Infrastructure.Extensions
             services.AddDbContext<PharmaBlockchainBackendDbContext>(options =>
                 options.UseNpgsql(connectionString));
 
-            //services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IRepository<Cmo>, Repository<Cmo>>();
+            services.AddScoped<IRepository<Package>, Repository<Package>>();
+            services.AddScoped<IRepository<Pallet>, Repository<Pallet>>();
+            services.AddScoped<IRepository<ProtocolStep>, Repository<ProtocolStep>>();
 
             return services;
         }

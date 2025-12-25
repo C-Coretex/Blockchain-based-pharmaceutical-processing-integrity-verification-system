@@ -2,20 +2,23 @@
 
 namespace PharmaBlockchainBackend.Infrastructure
 {
-    public interface IRepository<TEntity>
-        where TEntity : DbSet<TEntity>
+    public interface IRepository<TEntity> 
+        where TEntity : class
     {
         public DbSet<TEntity> DbSet { get; }
+        public DbContext DbContext { get; }
     }
 
-    public class Repository<TEntity> : IRepository<TEntity>
-        where TEntity : DbSet<TEntity>
+    public class Repository<TEntity> : IRepository<TEntity> 
+        where TEntity : class
     {
         public DbSet<TEntity> DbSet { get; }
+        public DbContext DbContext { get; }
 
-        public Repository(DbSet<TEntity> dbSet)
+        public Repository(PharmaBlockchainBackendDbContext dbContext)
         {
-            DbSet = dbSet;
+            DbContext = dbContext;
+            DbSet = dbContext.Set<TEntity>();
         }
     }
 }

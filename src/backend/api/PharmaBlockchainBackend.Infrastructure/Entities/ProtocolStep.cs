@@ -19,6 +19,7 @@ namespace PharmaBlockchainBackend.Infrastructure.Entities
         public Guid PackageId { get; set; }
         public virtual Package Package { get; set; } = null!;
 
+        public required byte[] Hash { get; set; }
         public DateTime Timestamp { get; set; }
 
         public object? AdditionalData { get; set; }

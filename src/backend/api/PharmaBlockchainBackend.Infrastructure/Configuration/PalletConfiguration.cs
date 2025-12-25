@@ -11,6 +11,7 @@ namespace PharmaBlockchainBackend.Infrastructure.Configuration
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Code).IsRequired();
+            builder.HasIndex(x => x.Code).IsUnique();
         }
     }
 }

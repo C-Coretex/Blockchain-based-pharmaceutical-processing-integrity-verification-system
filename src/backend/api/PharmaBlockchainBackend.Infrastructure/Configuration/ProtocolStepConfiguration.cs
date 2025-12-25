@@ -12,6 +12,7 @@ namespace PharmaBlockchainBackend.Infrastructure.Configuration
 
             builder.Property(x => x.ProtocolType).IsRequired();
             builder.Property(x => x.StepNumber).IsRequired();
+            builder.Property(x => x.Hash).IsRequired();
 
             builder.Property(x => x.AdditionalData).HasConversion(
                 v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),

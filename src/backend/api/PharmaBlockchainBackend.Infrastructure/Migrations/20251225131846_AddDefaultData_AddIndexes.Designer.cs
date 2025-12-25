@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PharmaBlockchainBackend.Infrastructure;
@@ -11,9 +12,11 @@ using PharmaBlockchainBackend.Infrastructure;
 namespace PharmaBlockchainBackend.Infrastructure.Migrations
 {
     [DbContext(typeof(PharmaBlockchainBackendDbContext))]
-    partial class PharmaBlockchainBackendDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251225131846_AddDefaultData_AddIndexes")]
+    partial class AddDefaultData_AddIndexes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

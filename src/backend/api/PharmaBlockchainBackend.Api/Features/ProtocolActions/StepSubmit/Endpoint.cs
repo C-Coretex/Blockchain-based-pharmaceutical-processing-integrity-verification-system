@@ -12,8 +12,15 @@
                 if (!Validator.IsValid(request, out var error))
                     return Results.BadRequest(error);
 
-                await handler.Handle(request, ct);
-                return Results.Ok();
+                try
+                {
+                    await handler.Handle(request, ct);
+                    return Results.Ok();
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest(ex.Message);
+                }
             })
             .Produces(StatusCodes.Status200OK)
             .Produces<string>(StatusCodes.Status400BadRequest);

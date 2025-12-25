@@ -9,6 +9,7 @@ namespace PharmaBlockchainBackend.Api.Features.ProtocolActions.StepSubmit
         public required int StepNumber { get; init; }
         public required Guid[] PackageCodes { get; init; }
 
+        public Guid? PalletCode { get; init; }
         public object? AdditionalData { get; init; }
     }
 }
