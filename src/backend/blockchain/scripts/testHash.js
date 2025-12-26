@@ -24,7 +24,7 @@ async function main() {
   console.log("Writing hash:", hash);
 
 // save hash
-  const tx = await Contract.storeHash(hash);
+  const tx = await Contract.recordHash(hash);
   const receipt = await tx.wait();
 
   const blockNumber = receipt.blockNumber;
@@ -35,7 +35,7 @@ async function main() {
   console.log("Timestamp:", timestamp);
 
   // Try to get hash by timestamp
-  const storedHash = await Contract.AuditRegistry(timestamp);
+  const storedHash = await Contract.getHashByTimestamp(timestamp);
   console.log("Read hash:", storedHash);
 }
 
