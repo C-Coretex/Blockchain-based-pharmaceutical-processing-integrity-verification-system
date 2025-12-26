@@ -11,4 +11,10 @@ export default {
       },
     },
   },
+  paths: {
+    sources: "./src/backend/blockchain/contracts",
+    scripts: "./src/backend/blockchain/scripts",
+    artifacts: "./src/backend/blockchain/artifacts",
+    cache: "./src/backend/blockchain/cache"
+  },
 };
