@@ -1,5 +1,10 @@
 # Blockchain-based-pharmaceutical-processing-integrity-verification-system
 
+## How to run
+You should have Docker installed.
+1. Open such folder in terminal: `./src`
+2. Run such command: `docker compose up`
+
 ## Description
 This project provides a blockchain-based auditing system for verifying the integrity of pharmaceutical manufacturing conditions.  
 It involves three main participants:

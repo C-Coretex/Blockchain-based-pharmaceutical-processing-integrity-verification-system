@@ -1,15 +1,48 @@
 version: '3.9'
 
 services:
-  postgres:
-    image: postgres:15
-    container_name: auditchain-db
-    restart: always
+  #Backend
+  pharma.api:
+    image: ${DOCKER_REGISTRY-}pharma.api
+    container_name: pharma.api
+    build:
+      context: .
+      dockerfile: ./backend/api/PharmaBlockchainBackend.Api/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      pharma.infrastructure:
+        condition: service_healthy
+
+  #Databases
+  pharma.infrastructure:
+    image: postgres:latest
+    container_name: pharma.infrastructure
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: auditdb
+      POSTGRES_DB: apiDb
+    volumes:
+      - ./.containers/db:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  #pgAdmin
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 8001
+    ports:
+      - "8001:8001"
     volumes:
-      - ./db_data:/var/lib/postgresql/data
+      - ./.containers/pgadmin:/var/lib/pgadmin
+    depends_on:
+      - pharma.infrastructure

@@ -1,0 +1,30 @@
+@PharmaBlockchainBackend.Api_HostAddress = http://localhost:8080
+
+### Example 1: Submit Protocol Step Successfully
+POST {{PharmaBlockchainBackend.Api_HostAddress}}/protocol/stepSubmit
+Content-Type: application/json
+
+{
+  "cmoId": "d525062a-0c4b-4e1a-a5fe-6e1f567530f3",
+  "protocolType": 0,
+  "stepNumber": 1,
+  "packageCodes": [
+    "a3bb189e-8bf9-3888-9912-ace4e6543002",
+    "a3bb189e-8bf9-3888-9912-ace4e6543003"
+  ],
+  "palletCode": "a3bb189e-8bf9-3888-9912-ace4e6543004",
+  "additionalData": {
+    "key": "value"
+  }
+}
+
+### Example 2: Submit Protocol Step with Validation Error
+POST {{PharmaBlockchainBackend.Api_HostAddress}}/protocol/stepSubmit
+Content-Type: application/json
+
+{
+  "cmoId": "a3bb189e-8bf9-3888-9912-ace4e6543004",
+  "protocolType": 0,
+  "stepNumber": 0,
+  "packageCodes": []
+}
