@@ -24,7 +24,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: apiDb
     volumes:
-      - ./.containers/db:/var/lib/postgresql/data
+      - ./.containers/db:/var/lib/postgresql
     ports:
       - "5432:5432"
     healthcheck:
