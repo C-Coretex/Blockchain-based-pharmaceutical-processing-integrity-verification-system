@@ -34,7 +34,7 @@ services:
       retries: 10
 
   #pgAdmin
-  pgadmin:
+  pharma.pgadmin:
     image: dpage/pgadmin4:latest
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com

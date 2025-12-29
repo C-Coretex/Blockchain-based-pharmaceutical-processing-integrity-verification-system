@@ -21,4 +21,8 @@
     <ProjectReference Include="..\PharmaBlockchainBackend.Infrastructure\PharmaBlockchainBackend.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\ProtocolActions\GetDetails\" />
+  </ItemGroup>
+
 </Project>
