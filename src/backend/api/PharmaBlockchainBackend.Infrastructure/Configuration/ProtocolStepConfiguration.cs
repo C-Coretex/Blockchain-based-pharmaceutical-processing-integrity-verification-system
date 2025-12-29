@@ -18,6 +18,9 @@ namespace PharmaBlockchainBackend.Infrastructure.Configuration
                 v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
                 v => System.Text.Json.JsonSerializer.Deserialize<object>(v, (System.Text.Json.JsonSerializerOptions?)null));
 
+            builder.HasIndex(x => new { x.CmoId, x.ProtocolType });
+            builder.HasIndex(x => new { x.ProtocolType, x.PalletId });
+
             builder.HasOne(x => x.Cmo)
                    .WithMany(p => p.ProtocolSteps)
                    .HasForeignKey(x => x.CmoId)

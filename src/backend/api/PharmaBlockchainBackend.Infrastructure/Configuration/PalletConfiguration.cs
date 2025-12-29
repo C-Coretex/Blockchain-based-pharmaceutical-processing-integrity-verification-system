@@ -9,9 +9,7 @@ namespace PharmaBlockchainBackend.Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<Pallet> builder)
         {
             builder.HasKey(x => x.Id);
-
-            builder.Property(x => x.Code).IsRequired();
-            builder.HasIndex(x => x.Code).IsUnique();
+            builder.HasAlternateKey(x => x.Code);
         }
     }
 }

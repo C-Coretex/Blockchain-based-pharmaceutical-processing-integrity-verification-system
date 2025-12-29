@@ -5,7 +5,7 @@ namespace PharmaBlockchainBackend.Api.Features.ProtocolActions.List
 {
     public class Handler(IAggregateRepository<ProtocolReportAggregate> protocolReportAggregate)
     {
-        public async Task<IAsyncEnumerable<Response>> Handle(Request request, CancellationToken ct)
+        public async Task<IAsyncEnumerable<Response>> Handle(Request request)
         {
             var query = protocolReportAggregate.Query;
 

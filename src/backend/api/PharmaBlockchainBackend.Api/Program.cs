@@ -10,6 +10,7 @@ builder.Services.RegisterRepositories(dbConnectionString);
 
 builder.Services.AddScoped<PharmaBlockchainBackend.Api.Features.ProtocolActions.StepSubmit.Handler>();
 builder.Services.AddScoped<PharmaBlockchainBackend.Api.Features.ProtocolActions.List.Handler>();
+builder.Services.AddScoped<PharmaBlockchainBackend.Api.Features.ProtocolActions.GetDetails.Handler>();
 
 var uiUrl = builder.Configuration.GetValue<string>("AppSettings:uiUrl")!;
 builder.Services.AddCors(options =>
@@ -25,7 +26,10 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.CustomSchemaIds(type => type.FullName);
+});
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -46,5 +50,6 @@ app.UseHttpsRedirection();
 
 PharmaBlockchainBackend.Api.Features.ProtocolActions.StepSubmit.Endpoint.Map(app);
 PharmaBlockchainBackend.Api.Features.ProtocolActions.List.Endpoint.Map(app);
+PharmaBlockchainBackend.Api.Features.ProtocolActions.GetDetails.Endpoint.Map(app);
 
 app.Run();
