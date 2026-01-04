@@ -8,7 +8,7 @@ namespace PharmaBlockchainBackend.Api.Features.ProtocolActions.GetDetails
         {
             error = request switch
             {
-                //{ ProtocolType: ProtocolType.None } => "ProtocolType cannot be None.",
+                { ProtocolType: ProtocolType.None } => "ProtocolType cannot be None.",
                 { PalletCode: var pallet } when pallet == Guid.Empty => "PalletId cannot be an empty GUID.",
                 _ => null
             };

@@ -9,7 +9,7 @@ namespace PharmaBlockchainBackend.Api.Features.ProtocolActions.StepSubmit
             error = request switch
             {
                 { CmoId: var cmo } when cmo == Guid.Empty => "CmoId is required.",
-                //{ ProtocolType: ProtocolType.None } => "ProtocolType cannot be None.",
+                { ProtocolType: ProtocolType.None } => "ProtocolType cannot be None.",
                 { StepNumber: < 0 } => "StepNumber must be greater or equal to 0.",
                 { StepNumber: var step } when step > ProtocolTypeHelpers.ProtocolTypeMaxSteps[request.ProtocolType] => $"StepNumber cannot be greater than {ProtocolTypeHelpers.ProtocolTypeMaxSteps[request.ProtocolType]}.",
                 { PackageCodes: not { Length: > 0 } }=> "At least one PackageCode must be provided.",
