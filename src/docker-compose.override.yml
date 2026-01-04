@@ -6,9 +6,14 @@ services:
       ASPNETCORE_HTTPS_PORTS: 8081
       AppSettings__uiUrl: http://localhost:5173
       ConnectionStrings__DbConnectionString: Host=pharma.infrastructure;Port=5432;Database=apiDb;Username=postgres;Password=postgres
+      Blockchain__RpcUrl: http://pharma.blockchain:8545
     ports:
-      - "8080:8080"
-      - "8081:8081"
+      - "5080:8080"
+      - "5081:8081"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    depends_on:
+      pharma.blockchain:
+        condition: service_started
+     
