@@ -1,5 +1,9 @@
 using PharmaBlockchainBackend.Infrastructure;
 using PharmaBlockchainBackend.Infrastructure.Extensions;
+using PharmaBlockchainBackend.Providers.Blockchain;
+using PharmaBlockchainBackend.Providers.Blockchain.Options;
+using PharmaBlockchainBackend.Domain.Blockchain;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,11 +29,20 @@ builder.Services.AddCors(options =>
                 .AllowCredentials();
         });
 });
+builder.Services.Configure<BlockchainOptions>(
+    builder.Configuration.GetSection("Blockchain"));
+
+builder.Services.AddBlockchain();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.CustomSchemaIds(type => type.FullName);
+});
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080); // HTTP only
 });
 
 var app = builder.Build();
@@ -47,11 +60,15 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 PharmaBlockchainBackend.Api.Features.ProtocolActions.StepSubmit.Endpoint.Map(app);
 PharmaBlockchainBackend.Api.Features.ProtocolActions.List.Endpoint.Map(app);
 PharmaBlockchainBackend.Api.Features.ProtocolActions.GetDetails.Endpoint.Map(app);
 PharmaBlockchainBackend.Api.Features.DataValidation.Validate.Endpoint.Map(app);
+
 
 app.Run();

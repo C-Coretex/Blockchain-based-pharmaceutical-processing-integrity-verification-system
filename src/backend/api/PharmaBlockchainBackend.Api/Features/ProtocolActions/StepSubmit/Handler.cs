@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmaBlockchainBackend.Domain.Helpers;
+using PharmaBlockchainBackend.Domain.Blockchain;
 using PharmaBlockchainBackend.Infrastructure;
 using PharmaBlockchainBackend.Infrastructure.Entities;
 
 namespace PharmaBlockchainBackend.Api.Features.ProtocolActions.StepSubmit
 {
-    public class Handler(IRepository<ProtocolStep> protocolStepRepository, IRepository<Package> packageRepository, IRepository<Pallet> palletRepository, IRepository<Cmo> cmoRepository)
+    public class Handler(IRepository<ProtocolStep> protocolStepRepository, IRepository<Package> packageRepository, IRepository<Pallet> palletRepository, IRepository<Cmo> cmoRepository,IBlockchainHashWriter blockchainHashWriter)
     {
         public async Task Handle(Request request, CancellationToken ct)
         {
@@ -22,9 +23,22 @@ namespace PharmaBlockchainBackend.Api.Features.ProtocolActions.StepSubmit
                 packageHashes.Add((packageCode, hash));
             }
 
-            //TODO: Send data to blockchain (hashes in one batch)
-            var timestamp = DateTime.UtcNow; //We will get it from Blockchain
+            // Send data to blockchain
+            var timestamp_temp = await blockchainHashWriter
+                .RecordHashesAsync(
+                    packageHashes.Select(h => h.hash).ToList(),
+                    ct);
 
+            DateTime timestamp = default;
+            //TODO make better error handling here
+            if (timestamp_temp.HasValue)
+            {
+                timestamp = (DateTime)timestamp_temp;
+            }
+            else
+            {
+                throw new InvalidOperationException("Failed to record hashes on the blockchain.");
+            }
 
             //Save data to database
             //Add packages and pallets if they do not exist

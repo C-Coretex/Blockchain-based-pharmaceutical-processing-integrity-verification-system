@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PharmaBlockchainBackend.Domain\PharmaBlockchainBackend.Domain.csproj" />
     <ProjectReference Include="..\PharmaBlockchainBackend.Infrastructure\PharmaBlockchainBackend.Infrastructure.csproj" />
+    <ProjectReference Include="..\PharmaBlockchainBackend.Providers.Blockchain\PharmaBlockchainBackend.Providers.Blockchain.csproj" />
   </ItemGroup>
 
 </Project>
