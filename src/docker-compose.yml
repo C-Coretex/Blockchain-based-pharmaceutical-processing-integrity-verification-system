@@ -56,6 +56,7 @@ services:
     working_dir: /app/backend/blockchain
     volumes:
       - .:/app
+      - ./chain-data:/chain 
     command: >
       sh -c "
         npm install --legacy-peer-deps &&
@@ -65,3 +66,5 @@ services:
         tail -f /dev/null"
     ports:
       - "8545:8545"
+        
+  
