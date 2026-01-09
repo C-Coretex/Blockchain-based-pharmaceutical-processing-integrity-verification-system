@@ -8,40 +8,33 @@ contract AuditRegistry {
         uint256 timestamp;
     }
 
-    // timestamp => hash
-    mapping(uint256 => bytes32) private records;
+    mapping(uint256 => bytes32[]) private records;
 
-    event HashRecorded(bytes32 hash, uint256 timestamp);
+    event HashesRecorded(bytes32[] hashes, uint256 timestamp);
 
-    /**
-     * @notice Store a hash in the blockchain and return block timestamp
-     * @param dataHash Hash of off-chain data
-     * @return timestamp Block timestamp when hash was recorded
-     */
-    function recordHash(bytes32 dataHash) external returns (uint256 timestamp) {
+    function recordHashes(bytes32[] calldata hashes)
+        external
+        returns (uint256 timestamp)
+    {
+        require(hashes.length > 0, "Empty batch");
+
         timestamp = block.timestamp;
+        require(records[timestamp].length == 0, "Record already exists");
 
-        require(records[timestamp] == bytes32(0), "Record already exists");
+        records[timestamp] = hashes;
 
-        records[timestamp] = dataHash;
-
-        emit HashRecorded(dataHash, timestamp);
+        emit HashesRecorded(hashes, timestamp);
 
         return timestamp;
     }
 
-    /**
-     * @notice Get stored hash by timestamp
-     * @param timestamp Block timestamp
-     * @return dataHash Hash stored at that timestamp
-     */
-    function getHashByTimestamp(uint256 timestamp)
+    function getHashesByTimestamp(uint256 timestamp)
         external
         view
-        returns (bytes32 dataHash)
+        returns (bytes32[] memory)
     {
-        dataHash = records[timestamp];
-        require(dataHash != bytes32(0), "No record for this timestamp");
-        return dataHash;
+        bytes32[] memory result = records[timestamp];
+        require(result.length > 0, "No record for this timestamp");
+        return result;
     }
 }
