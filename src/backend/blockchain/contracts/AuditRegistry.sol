@@ -3,14 +3,13 @@ pragma solidity ^0.8.20;
 
 contract AuditRegistry {
 
-    struct Record {
-        bytes32 hash;
-        uint256 timestamp;
-    }
-
+    // timestamp => hashes
     mapping(uint256 => bytes32[]) private records;
 
-    event HashesRecorded(bytes32[] hashes, uint256 timestamp);
+    event HashesRecorded(
+        uint256 indexed timestamp,
+        bytes32[] hashes
+    );
 
     function recordHashes(bytes32[] calldata hashes)
         external
@@ -19,11 +18,12 @@ contract AuditRegistry {
         require(hashes.length > 0, "Empty batch");
 
         timestamp = block.timestamp;
-        require(records[timestamp].length == 0, "Record already exists");
 
-        records[timestamp] = hashes;
+        for (uint256 i = 0; i < hashes.length; i++) {
+            records[timestamp].push(hashes[i]);
+        }
 
-        emit HashesRecorded(hashes, timestamp);
+        emit HashesRecorded(timestamp, hashes);
 
         return timestamp;
     }
@@ -33,8 +33,6 @@ contract AuditRegistry {
         view
         returns (bytes32[] memory)
     {
-        bytes32[] memory result = records[timestamp];
-        require(result.length > 0, "No record for this timestamp");
-        return result;
+        return records[timestamp];
     }
 }
