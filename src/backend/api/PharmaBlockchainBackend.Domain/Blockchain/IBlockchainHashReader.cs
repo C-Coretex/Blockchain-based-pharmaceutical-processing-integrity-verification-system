@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace PharmaBlockchainBackend.Domain.Blockchain
 {
-    public interface IBlockchainHashWriter
+    public interface IBlockchainHashReader
     {
         /// <summary>
         /// Writes one or more hashes to blockchain and returns block timestamp
         /// </summary>
-        Task<DateTime?> RecordHashesAsync(
-            IReadOnlyCollection<byte[]> hashes,
+        Task<IReadOnlyCollection<byte[]>> GetHashesByTimestampAsync(
+            long timestamp,
             CancellationToken ct);
     }
 }

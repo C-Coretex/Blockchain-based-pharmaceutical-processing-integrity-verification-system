@@ -23,12 +23,16 @@ services:
       AppSettings__uiUrl: http://localhost:5173
       ConnectionStrings__DbConnectionString: Host=pharma.infrastructure;Port=5432;Database=apiDb;Username=postgres;Password=postgres
       Blockchain__RpcUrl: http://pharma.blockchain:8545
+      Blockchain__ContractAddressFile: /app/shared/blockchain/AuditRegistry.address
+      Blockchain__PrivateKey: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+      Blockchain__AbiPath: /app/shared/blockchain/AuditRegistry.abi.json
     ports:
       - "5080:8080"
       - "5081:8081"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ./chain-data:/chain:ro
     depends_on:
       pharma.blockchain:
         condition: service_started

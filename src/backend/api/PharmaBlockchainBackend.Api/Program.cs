@@ -2,7 +2,6 @@ using PharmaBlockchainBackend.Infrastructure;
 using PharmaBlockchainBackend.Infrastructure.Extensions;
 using PharmaBlockchainBackend.Providers.Blockchain;
 using PharmaBlockchainBackend.Providers.Blockchain.Options;
-using PharmaBlockchainBackend.Domain.Blockchain;
 
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,13 +1,15 @@
 using Microsoft.Extensions.DependencyInjection;
 using PharmaBlockchainBackend.Domain.Blockchain;
 
-namespace PharmaBlockchainBackend.Providers.Blockchain;
-
-public static class DependencyInjection
+namespace PharmaBlockchainBackend.Providers.Blockchain
 {
-    public static IServiceCollection AddBlockchain(this IServiceCollection services)
+    public static class DependencyInjection
     {
-        services.AddScoped<IBlockchainHashWriter, AuditRegistryHashWriter>();
-        return services;
+        public static IServiceCollection AddBlockchain(this IServiceCollection services)
+        {
+            services.AddScoped<IBlockchainHashWriter, AuditRegistryHashWriter>();
+            services.AddScoped<IBlockchainHashReader, AuditRegistryHashReader>();
+            return services;
+        }
     }
 }

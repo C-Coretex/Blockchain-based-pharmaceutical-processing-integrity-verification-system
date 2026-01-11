@@ -1,4 +1,6 @@
-﻿namespace PharmaBlockchainBackend.Domain.Enums
+﻿using System.Collections.Generic;
+
+namespace PharmaBlockchainBackend.Domain.Enums
 {
     public enum ProtocolType
     {

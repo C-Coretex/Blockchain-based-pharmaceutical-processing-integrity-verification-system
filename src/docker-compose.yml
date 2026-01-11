@@ -17,6 +17,8 @@ services:
   pharma.api:
     image: ${DOCKER_REGISTRY-}pharma.api
     container_name: pharma.api
+    volumes:
+      - ./shared/blockchain:/app/shared/blockchain
     build:
       context: .
       dockerfile: ./backend/api/PharmaBlockchainBackend.Api/Dockerfile
@@ -29,6 +31,7 @@ services:
     depends_on:
       pharma.infrastructure:
         condition: service_healthy
+     
 
   #Databases
   pharma.infrastructure:
@@ -56,9 +59,10 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
       PGADMIN_LISTEN_PORT: 8001
     ports:
-      - "8002:8001"
+      - "8001:8001"
     volumes:
-      - ./.containers/pgadmin:/var/lib/pgadmin
+      - ./.containers/pgadmin:/var/lib/pgadmin 
+      - ./shared/blockchain:/app/shared/blockchain
     depends_on:
       - pharma.infrastructure
 
@@ -69,12 +73,20 @@ services:
     working_dir: /app/backend/blockchain
     volumes:
       - .:/app
+      - ./chain-data:/chain 
     command: >
       sh -c "
         npm install --legacy-peer-deps &&
-        npx hardhat node &
-        sleep 5 &&
+        npx hardhat node  &
+        sleep 15 &&
         npx hardhat run scripts/deploy.js --network localhost &&
         tail -f /dev/null"
     ports:
       - "8545:8545"
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /app/shared/blockchain/AuditRegistry.abi.json"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+        
+  
