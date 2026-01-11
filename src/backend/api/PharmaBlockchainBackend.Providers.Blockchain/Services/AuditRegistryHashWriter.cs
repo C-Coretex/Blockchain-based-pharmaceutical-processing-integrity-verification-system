@@ -59,15 +59,6 @@ public class AuditRegistryHashWriter : IBlockchainHashWriter
         if (hashes.Count == 0)
             return null;
 
-        foreach (var h in hashes)
-        {
-            if (h == null)
-                throw new Exception("Hash is null");
-
-            if (h.Length != 32)
-                throw new Exception($"Invalid hash length: {h.Length}");
-        }
-
         var hashes32 = hashes
            .Select(h =>
            {
@@ -82,10 +73,7 @@ public class AuditRegistryHashWriter : IBlockchainHashWriter
         var gas = new HexBigInteger(3_000_000);
         var contract = _web3.Eth.GetContract(_abi, _web3.TransactionManager.Account.Address);
         var function = contract.GetFunction("recordHashes");
-
-        Console.WriteLine(_web3.TransactionManager.Account.Address);
         var contractS = _web3.TransactionManager.Account.Address;
-
         var handler = _web3.Eth.GetContractTransactionHandler<RecordHashesFunction>();
         
         var tx = new RecordHashesFunction
@@ -97,8 +85,7 @@ public class AuditRegistryHashWriter : IBlockchainHashWriter
 
         var receipt = await handler.SendRequestAndWaitForReceiptAsync(
             _contractAddress,
-            tx
-        ); 
+            tx); 
 
         var evt = receipt
         .DecodeAllEvents<HashesRecordedEventDTO>()

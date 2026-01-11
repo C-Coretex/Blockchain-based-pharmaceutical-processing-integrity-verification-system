@@ -32,6 +32,7 @@ public class AuditRegistryHashReader : IBlockchainHashReader
     public AuditRegistryHashReader(IOptions<BlockchainOptions> options)
     {
         var opts = options.Value;
+        
         if (string.IsNullOrWhiteSpace(opts.AbiPath))
             throw new InvalidOperationException("Blockchain:AbiPath is not configured");
         if (!File.Exists(opts.AbiPath))
