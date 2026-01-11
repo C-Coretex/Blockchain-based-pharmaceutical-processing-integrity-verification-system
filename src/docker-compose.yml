@@ -55,25 +55,12 @@ services:
       - pharma.infrastructure
 
   pharma.blockchain:
-    image: node:22-alpine
     container_name: pharma.blockchain
-    working_dir: /app/backend/blockchain
-    volumes:
-      - .:/app
-      - ./chain-data:/chain 
-    command: >
-      sh -c "
-        npm install --legacy-peer-deps &&
-        npx hardhat node  &
-        sleep 15 &&
-        npx hardhat run scripts/deploy.js --network localhost &&
-        tail -f /dev/null"
+    build:
+      context: ./backend/blockchain
+      dockerfile: Dockerfile
     ports:
       - "8545:8545"
-    healthcheck:
-      test: ["CMD-SHELL", "test -f /app/shared/blockchain/AuditRegistry.abi.json"]
-      interval: 3s
-      timeout: 3s
-      retries: 20
+
         
   
