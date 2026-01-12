@@ -1,4 +1,4 @@
-﻿using PharmaBlockchainBackend.Domain.Helpers;
+﻿﻿using PharmaBlockchainBackend.Domain.Helpers;
 using PharmaBlockchainBackend.Domain.Blockchain;
 
 namespace PharmaBlockchainBackend.Api.Features.DataValidation.Validate
@@ -20,26 +20,34 @@ namespace PharmaBlockchainBackend.Api.Features.DataValidation.Validate
             foreach (var package in request.Packages)
             {
                 List<int> invalidSteps = [];
-                foreach(var packageStep in package.Steps)
+                foreach (var packageStep in package.Steps)
                 {
                     var actualHash = HashHelpers.CalculateHash(request.ProtocolType, packageStep.StepNumber, package.PackageCode, packageStep.AdditionalData);
 
                     IReadOnlyCollection<byte[]> blockchainHashes;
 
                     long unixTimestamp = ((DateTimeOffset)packageStep.Timestamp).ToUnixTimeSeconds();
-                     try
+                    try
                     {
-                    blockchainHashes = await _hashReader
-                            .GetHashesByTimestampAsync(unixTimestamp, ct);
-                    
-                    foreach (var blockHash in blockchainHashes)
-                    {
-                        var expectedHash = blockHash;
-                        var expectedTimestamp = packageStep.Timestamp; //TODO Guess we dont need that
+                        blockchainHashes = await _hashReader
+                                .GetHashesByTimestampAsync(unixTimestamp, ct);
 
-                        if (packageStep.Timestamp != expectedTimestamp || !expectedHash.SequenceEqual(actualHash))
+
+                        if (blockchainHashes == null || !blockchainHashes.Any())
+                        {
+
                             invalidSteps.Add(packageStep.StepNumber);
-                    }
+                            continue;
+                        }
+
+                        foreach (var blockHash in blockchainHashes)
+                        {
+                            var expectedHash = blockHash;
+                            var expectedTimestamp = packageStep.Timestamp; //TODO Guess we dont need that
+
+                            if (packageStep.Timestamp != expectedTimestamp || !expectedHash.SequenceEqual(actualHash))
+                                invalidSteps.Add(packageStep.StepNumber);
+                        }
                     }
                     catch
                     {
@@ -48,7 +56,7 @@ namespace PharmaBlockchainBackend.Api.Features.DataValidation.Validate
                         continue;
                     }
 
-                    
+
                 }
 
                 if (invalidSteps.Count > 0)

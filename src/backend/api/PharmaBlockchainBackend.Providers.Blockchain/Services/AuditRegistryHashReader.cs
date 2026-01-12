@@ -24,10 +24,10 @@ public class AuditRegistryHashReader : IBlockchainHashReader
         return address;
     }
 
-
     public AuditRegistryHashReader(IOptions<BlockchainOptions> options)
     {
         var opts = options.Value;
+        
         if (string.IsNullOrWhiteSpace(opts.AbiPath))
             throw new InvalidOperationException("Blockchain:AbiPath is not configured");
         if (!File.Exists(opts.AbiPath))
@@ -37,7 +37,6 @@ public class AuditRegistryHashReader : IBlockchainHashReader
         var account = new Account(opts.PrivateKey, chainId);
         _web3 = new Web3(account, opts.RpcUrl);
         _contractAddress = ReadContractAddress(opts.ContractAddressFile);
-
         _abi = File.ReadAllText(opts.AbiPath);
 
         if (string.IsNullOrWhiteSpace(_abi))
@@ -48,11 +47,6 @@ public class AuditRegistryHashReader : IBlockchainHashReader
     {
         var contract = _web3.Eth.GetContract(_abi, _contractAddress);
         var function = contract.GetFunction("getHashesByTimestamp");
-        //1767823321
-        //1767824738 
-        //1767824738
-        //1767825560
-        //1767979828
         var result = await function.CallAsync<List<byte[]>>(
             (ulong)timestamp
         );

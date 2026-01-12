@@ -1,22 +1,37 @@
 using Microsoft.Extensions.Options;
+using Nethereum.Contracts;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
 using PharmaBlockchainBackend.Domain.Blockchain;
 using PharmaBlockchainBackend.Providers.Blockchain.Options;
+using PharmaBLockchainBackendApi.Blockchain.Functions;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using PharmaBLockchainBackendApi.Blockchain.Functions;
+using static PharmaBlockchainBackend.Providers.Blockchain.Dto.BlockchainDto;
 
 public class AuditRegistryHashWriter : IBlockchainHashWriter
 {
     private readonly Web3 _web3;
     private readonly string _contractAddress;
     private readonly string _abi;
+
+    private static string ReadContractAddress(string path)
+    {
+        if (!File.Exists(path))
+            throw new FileNotFoundException($"Contract address file not found: {path}");
+
+        var address = File.ReadAllText(path).Trim();
+
+        if (!address.StartsWith("0x") || address.Length != 42)
+            throw new InvalidOperationException($"Invalid contract address: {address}");
+
+        return address;
+    }
 
     public AuditRegistryHashWriter(IOptions<BlockchainOptions> options)
     {
@@ -29,7 +44,7 @@ public class AuditRegistryHashWriter : IBlockchainHashWriter
         var chainId = 31337;
         var account = new Account(opts.PrivateKey, chainId);
         _web3 = new Web3(account, opts.RpcUrl);
-        _contractAddress = _web3.TransactionManager.Account.Address;
+        _contractAddress = ReadContractAddress(opts.ContractAddressFile); ;
 
         _abi = File.ReadAllText(opts.AbiPath);
 
@@ -43,16 +58,7 @@ public class AuditRegistryHashWriter : IBlockchainHashWriter
     {
         if (hashes.Count == 0)
             return null;
-        // var abi = await GetAbiAsync(ct);
 
-        foreach (var h in hashes)
-        {
-            if (h == null)
-                throw new Exception("Hash is null");
-
-            if (h.Length != 32)
-                throw new Exception($"Invalid hash length: {h.Length}");
-        }
         var hashes32 = hashes
            .Select(h =>
            {
@@ -62,27 +68,12 @@ public class AuditRegistryHashWriter : IBlockchainHashWriter
            })
            .ToArray();
 
+        object[] input = new object[]{hashes.Select(h => (object)h).ToArray()};
 
-
-        object[] input = new object[]
-    {
-        hashes.Select(h => (object)h).ToArray()
-    };
         var gas = new HexBigInteger(3_000_000);
         var contract = _web3.Eth.GetContract(_abi, _web3.TransactionManager.Account.Address);
         var function = contract.GetFunction("recordHashes");
-
-        // bytes32[] — это byte[][]
-        //var input = hashes.Select(h => h).ToArray();
-        Console.WriteLine(_web3.TransactionManager.Account.Address);
         var contractS = _web3.TransactionManager.Account.Address;
-
-        //var receipt = await function.SendTransactionAndWaitForReceiptAsync(
-        //    from: _web3.TransactionManager.Account.Address,
-        //    gas: new HexBigInteger(1_000_000),
-        //    value: null,
-        //    functionInput: input);
-
         var handler = _web3.Eth.GetContractTransactionHandler<RecordHashesFunction>();
         
         var tx = new RecordHashesFunction
@@ -93,21 +84,17 @@ public class AuditRegistryHashWriter : IBlockchainHashWriter
         };
 
         var receipt = await handler.SendRequestAndWaitForReceiptAsync(
-            contractS,
-            tx
-        ); 
+            _contractAddress,
+            tx); 
 
+        var evt = receipt
+        .DecodeAllEvents<HashesRecordedEventDTO>()
+        .Single();
 
-        //-------READY -------
-        Console.WriteLine($"TX block: {receipt.BlockNumber.Value}");
-        var block = await _web3.Eth.Blocks
-            .GetBlockWithTransactionsByNumber
-            .SendRequestAsync(receipt.BlockNumber);
-
-        Console.WriteLine($"Stored timestamp: {block.Timestamp.Value}");
+        var timestamp = evt.Event.Timestamp;
 
         return DateTimeOffset
-            .FromUnixTimeSeconds((long)block.Timestamp.Value)
+            .FromUnixTimeSeconds((long)timestamp)
             .UtcDateTime;
     }
 
@@ -124,7 +111,6 @@ public class AuditRegistryHashWriter : IBlockchainHashWriter
 
         return result;
     }
-
 
     private async Task<long> RecordSingleAsync(byte[] hash)
     {
