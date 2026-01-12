@@ -3,11 +3,6 @@ using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
 using PharmaBlockchainBackend.Domain.Blockchain;
 using PharmaBlockchainBackend.Providers.Blockchain.Options;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 
 
 public class AuditRegistryHashReader : IBlockchainHashReader
