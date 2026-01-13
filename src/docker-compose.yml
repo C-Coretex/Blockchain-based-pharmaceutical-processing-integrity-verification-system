@@ -1,18 +1,6 @@
-version: "3.9"
+version: '3.9'
 
 services:
-  #Frontend
-  pharma.frontend:
-    image: pharma.frontend
-    container_name: pharma.frontend
-    build:
-      context: ./frontend
-      dockerfile: ../build/frontend/Dockerfile
-    # ports:
-    #   - "3000:3000"
-    depends_on:
-      - pharma.api
-
   #Backend
   pharma.api:
     image: ${DOCKER_REGISTRY-}pharma.api
@@ -66,14 +54,16 @@ services:
     depends_on:
       - pharma.infrastructure
 
-  #Hardhat blockchain node
   pharma.blockchain:
     container_name: pharma.blockchain
     build:
       context: ./backend/blockchain
       dockerfile: Dockerfile
+    working_dir: /app
+    volumes:
+    - ./backend/blockchain:/app
     ports:
-      - "8545:8545"
+    - "8545:8545"
 
         
   
