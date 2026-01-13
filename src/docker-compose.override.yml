@@ -35,6 +35,7 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ./chain-data:/chain:ro
+      - ./shared/blockchain:/app/shared/blockchain
     depends_on:
       pharma.blockchain:
         condition: service_started
