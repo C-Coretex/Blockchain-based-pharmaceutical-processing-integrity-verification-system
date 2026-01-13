@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+ls node_modules/.bin | grep hardhat
+
 echo "Starting Hardhat node..."
 npx hardhat node --hostname 0.0.0.0 &
 HARDHAT_PID=$!

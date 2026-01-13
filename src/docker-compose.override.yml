@@ -36,6 +36,7 @@ services:
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ./chain-data:/chain:ro
       - ./shared/blockchain:/app/shared/blockchain
+      - /app/node_modules
     depends_on:
       pharma.blockchain:
         condition: service_started
