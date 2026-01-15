@@ -8,8 +8,8 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - CHOKIDAR_INTERVAL=100
-      - VITE_API_URL=http://localhost:5080
-      - VITE_APP_NAME=Pharmacy-scanner
+    env_file:
+      - ./frontend/.env.example
     volumes:
       - ./frontend:/app
       - /app/node_modules
